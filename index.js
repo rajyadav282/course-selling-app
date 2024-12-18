@@ -1,10 +1,15 @@
+require("dotenv").config()
+
+
+
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const {adminRouter} = require("./routers/admin")
 const {userRouter} = require("./routers/user");
 const {courseRouter} = require("./routers/course");
-const { userModel } = require("./db");
+
+
 const app = express();
 app.use(express.json());
 
@@ -15,7 +20,7 @@ app.use("/course" , courseRouter);
 app.use("/admin" , adminRouter);
 
 async function main(){
-await mongoose.connect("mongodb+srv://yraj98391:jfaaVSWlZXVWoFDe@cluster0.mquxa.mongodb.net/course-selling-db");
+await mongoose.connect(process.env.mongo_url);
 console.log("Connecting To The DB");
 app.listen(3000);
 }

@@ -1,10 +1,12 @@
-const jwt_admin_password = require("../config");
+
 const jwt = require("jsonwebtoken")
+const {JWT_ADMIN_PASSWORD} = require("../config");
 function adminMiddleware(req , res , next){
     const token = req.body.token;
     const adminverify = jwt.verify({
         token
-    },jwt_admin_password)
+    },JWT_ADMIN_PASSWORD)
+    
     if(adminverify){
         req.userId = adminverify.id;
     }

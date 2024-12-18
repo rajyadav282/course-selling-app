@@ -4,7 +4,7 @@ const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 const userRouter = Router();
-const jwt_user_password = require("../config");
+const JWT_USER_PASSWORD = require("../config");
 const {userMiddeleware} = require("../middlewares/user")
 
 userRouter.post( "/signup" ,async function (req,res){
@@ -41,7 +41,7 @@ userRouter.post("/login" , async function (req,res){
     if(user){
         const token = jwt.sign({
             id : user._id
-        },jwt_user_password)
+        },JWT_USER_PASSWORD)
         res.json({
             message : token
         })

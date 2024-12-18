@@ -1,22 +1,22 @@
 const {Router} = require("express"); 
-const {adminModel} = require("../db");
+const {adminModel , courseModel} = require("../db");
 const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const  jwt  = require("jsonwebtoken");
-const jwt_admin_password = require("../config")
-const {amdinMiddlwware} = require("");
+const JWT_ADMIN_PASSWORD = require("../config")
+
 const { adminMiddleware } = require("../middlewares/admin");
 
 const adminRouter = Router();
 
 adminRouter.post("/signup" ,async function(req,res){
     
-    const adminSchema = z.object({
-        email : z.string().min(3).max(100).email(),
-        password : z.string().min(3).max(100),
-        firstName : z.string,
-        lastname : z.string
-    })
+    // const adminSchema = z.object({
+    //     email : z.string().min(3).max(100).email(),
+    //     password : z.string().min(3).max(100),
+    //     firstName : z.string,
+    //     lastname : z.string
+    // })
 
     const { email , password ,firstName , lastName } = req.body;
 
@@ -43,7 +43,7 @@ adminRouter.post("/signin" ,async function(req,res){
     if(adminfound){
         const token = jwt.sign({
             id : adminfound._id
-        },jwt_admin_password)
+        },JWT_ADMIN_PASSWORD)
         res.json({
             message : token
         })
@@ -54,7 +54,7 @@ adminRouter.post("/course" ,adminMiddleware, async function(req,res){
     const adminId = req.userId;
 
     const {title ,description ,imageUrl ,price } = req.body;
-    await adminModel.create({
+    const course = await courseModel.create({
         title : title,
         description : description,
         imageUrl : imageUrl,
@@ -68,12 +68,30 @@ adminRouter.post("/course" ,adminMiddleware, async function(req,res){
     })
 })
 
-adminRouter.put("/course" , function(req,res){
+adminRouter.put("/course" , adminMiddleware , async function(req,res){
+    const adminId = req.userId;
+
+    const {title , description , imageUrl , price , courseId} = req.body;
     
+    const course = await courseModel.updateOne({
+    _id : courseId,creatorId : adminId
+    },{
+        title : title,
+        description : description,
+        imageUrl : imageUrl,
+        price  :price
+    })
+    res.json({
+        message : "Course Updated",
+        courseId : course._id
+    })
 })
 
-adminRouter.get("/course/bulk" , function(req,res){
-    
+adminRouter.get("/course/bulk" ,adminMiddleware, async function(req,res){
+    const adminId = userId;
+    const course = await courseModel.find({
+     creatorId : adminId
+    })
 })
 
 module.exports = {

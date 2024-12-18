@@ -1,7 +1,8 @@
-const jwt_admin_password = "indira@12345";
-const jwt_user_password = "mahendra@1234";
+
+const JWT_ADMIN_PASSWORD = process.env.jwt_admin_password ;
+const JWT_USER_PASSWORD = process.env.jwt_user_password;
 
 module.exports = {
-    jwt_admin_password,
-    jwt_user_password
+    JWT_ADMIN_PASSWORD,
+    JWT_USER_PASSWORD
 }
