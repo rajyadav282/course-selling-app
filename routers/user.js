@@ -3,8 +3,9 @@ const { userModel } = require("../db");
 const { z } = require("zod"); 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
-const jwt_user_password = "mahendra@1234";
 const userRouter = Router();
+const jwt_user_password = require("../config");
+const {userMiddeleware} = require("../middlewares/user")
 
 userRouter.post( "/signup" ,async function (req,res){
     const userSchema = z.object({
@@ -19,7 +20,7 @@ userRouter.post( "/signup" ,async function (req,res){
 
         await userModel.create({
             email : email,
-            password : passwordassword,
+            password : password,
             firstName :firstName,
             lastName : lastName
         })

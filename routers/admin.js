@@ -3,7 +3,9 @@ const {adminModel} = require("../db");
 const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const  jwt  = require("jsonwebtoken");
-const jwt_admin_password = "indira@12345";
+const jwt_admin_password = require("../config")
+const {amdinMiddlwware} = require("");
+const { adminMiddleware } = require("../middlewares/admin");
 
 const adminRouter = Router();
 
@@ -48,8 +50,22 @@ adminRouter.post("/signin" ,async function(req,res){
     }
 })
 
-adminRouter.post("/course" , function(req,res){
-    
+adminRouter.post("/course" ,adminMiddleware, async function(req,res){
+    const adminId = req.userId;
+
+    const {title ,description ,imageUrl ,price } = req.body;
+    await adminModel.create({
+        title : title,
+        description : description,
+        imageUrl : imageUrl,
+        price : price,
+        creatorId : adminId
+    })
+
+    res.json({
+        message : "New Course has been created",
+        creatorId  : course._id
+    })
 })
 
 adminRouter.put("/course" , function(req,res){
