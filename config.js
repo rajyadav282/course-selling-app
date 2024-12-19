@@ -5,4 +5,4 @@ const JWT_USER_PASSWORD = process.env.jwt_user_password;
 module.exports = {
     JWT_ADMIN_PASSWORD,
     JWT_USER_PASSWORD
-}
+} 

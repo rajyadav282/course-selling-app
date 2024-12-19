@@ -8,7 +8,7 @@ const JWT_USER_PASSWORD = require("../config");
 const {userMiddeleware} = require("../middlewares/user")
 
 userRouter.post( "/signup" ,async function (req,res){
-    const userSchema = z.object({
+    const userSchema = z.object({      
         email : z.string().min(3).max(100).email(),
         password : z.string().min(3).max(100) , 
         firstName : z.string(),
